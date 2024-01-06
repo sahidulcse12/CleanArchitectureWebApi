@@ -34,31 +34,34 @@ namespace CleanArchitectureWebApi.Api.Controllers
         }
 
         [HttpPost("add")]
-        public async Task AddBlog(BlogDto blog)
+        public async Task<IActionResult> AddBlog(BlogDto blog)
         {
             await _blogService.Add(blog);
+            return Ok("Blog is added successfully");
         }
 
         [HttpPut("{id}")]
-        public async Task Update(int id, BlogDto blog)
+        public async Task<IActionResult> Update(int id, BlogDto blog)
         {
             var blogList = await _blogService.GetById(id);
             if(blogList is null)
             {
-                return;
+                return Ok("Blog is not found");
             }
             await _blogService.Update(id,blog);
+            return Ok("Blog is updated successfully");
         }
 
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var blog = await _blogService.GetById(id);
             if(blog is null)
             {
-                return;
+                return Ok("Blog is not found");
             }
             await _blogService.Delete(id);
+            return Ok("Blog is deleted successfully");
         }
     }
 }
