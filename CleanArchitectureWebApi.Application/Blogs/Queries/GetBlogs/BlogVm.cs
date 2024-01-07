@@ -1,6 +1,5 @@
-﻿
+﻿using CleanArchitectureWebApi.Domain.Entities.Blog;
 using CleanArchitectureWebApi.Application.Common.Mapping;
-using CleanArchitectureWebApi.Domain.Entities.Blog;
 
 namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs
 {

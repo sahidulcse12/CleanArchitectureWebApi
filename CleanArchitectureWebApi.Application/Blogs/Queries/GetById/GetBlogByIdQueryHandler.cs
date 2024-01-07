@@ -22,7 +22,7 @@ namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetById
         }
         public async Task<BlogVm> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
         {
-            var blog = await _blogService.GetById(request.BlogId);
+            var blog = await _blogService.GetByIdAsync(request.BlogId);
             return _mapper.Map<BlogVm>(blog);
         }
     }

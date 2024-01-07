@@ -17,7 +17,7 @@ namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs
         }
         public async Task<IList<BlogVm>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
         {
-            var blogs = await _blogService.GetAll();
+            var blogs = await _blogService.GetAllAsync();
 
             //var blogList = blogs.Select(x => new BlogVm
             //{

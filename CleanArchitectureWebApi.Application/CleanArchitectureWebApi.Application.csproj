@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Blogs\Commands\Create\" />
     <Folder Include="Blogs\Commands\Delete\" />
-    <Folder Include="Blogs\Commands\Update\" />
     <Folder Include="Common\Behaviors\" />
     <Folder Include="Common\Exceptions\" />
   </ItemGroup>

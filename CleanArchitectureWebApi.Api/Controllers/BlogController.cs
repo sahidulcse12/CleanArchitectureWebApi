@@ -1,32 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CleanArchitectureWebApi.Domain.Entities.Blog;
-using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
-using CleanArchitectureWebApi.Application.DTOs;
+using CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs;
+using CleanArchitectureWebApi.Application.Blogs.Queries.GetById;
+using CleanArchitectureWebApi.Application.Blogs.Commands.Create;
+using CleanArchitectureWebApi.Application.Blogs.Commands.Update;
+using CleanArchitectureWebApi.Application.Blogs.Commands.Delete;
 
 namespace CleanArchitectureWebApi.Api.Controllers
 {
     [Route("api/blog")]
     [ApiController]
-    public class BlogController : ControllerBase
+    public class BlogController : ApiControllerBase
     {
-        private readonly IBlogService _blogService;
-        public BlogController(IBlogService blogService)
-        {
-            _blogService = blogService;
-        }
-
         [HttpGet("getAll")]
-        public async Task<ActionResult<Blog>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var item = await _blogService.GetAll();
+            var item = await Mediatr.Send(new GetBlogQuery());
             return Ok(item);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Blog>> GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var blog = await _blogService.GetById(id);
-            if(blog is null)
+            var blog = await Mediatr.Send(new GetBlogByIdQuery() { BlogId = id });
+            if (blog is null)
             {
                 return NotFound("Student not found.");
             }
@@ -34,34 +30,32 @@ namespace CleanArchitectureWebApi.Api.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddBlog(BlogDto blog)
+        public async Task<IActionResult> AddBlog(CreateCommand command)
         {
-            await _blogService.Add(blog);
-            return Ok("Blog is added successfully");
+            var createdBlog = await Mediatr.Send(command);
+            return CreatedAtAction(nameof(GetById), new { id = createdBlog.Id }, createdBlog);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, BlogDto blog)
+        public async Task<IActionResult> Update(int id, UpdateCommand command)
         {
-            var blogList = await _blogService.GetById(id);
-            if(blogList is null)
+            if (id != command.Id)
             {
-                return Ok("Blog is not found");
+                return BadRequest();
             }
-            await _blogService.Update(id,blog);
-            return Ok("Blog is updated successfully");
+            await Mediatr.Send(command);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var blog = await _blogService.GetById(id);
-            if(blog is null)
+            var result = await Mediatr.Send(new DeleteCommand { Id = id });
+            if (result == 0)
             {
-                return Ok("Blog is not found");
+                return BadRequest();
             }
-            await _blogService.Delete(id);
-            return Ok("Blog is deleted successfully");
+            return NoContent();
         }
     }
 }

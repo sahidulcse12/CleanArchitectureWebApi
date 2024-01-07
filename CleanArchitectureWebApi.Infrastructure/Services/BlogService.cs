@@ -1,81 +1,53 @@
-﻿using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
-using CleanArchitectureWebApi.Application.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
 using CleanArchitectureWebApi.Domain.Entities.Blog;
 using CleanArchitectureWebApi.Infrastructure.Data.DbContexts;
+using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
 
 namespace CleanArchitectureWebApi.Infrastructure.Services
 {
     public class BlogService : IBlogService
     {
-        private readonly IRepository<Blog> _blogRepository;
-        private readonly BlogDbContext _context;
+        private readonly BlogDbContext _blogDbContext;
 
-        public BlogService(IRepository<Blog> blogRepository, BlogDbContext context)
+        public BlogService(BlogDbContext blogDbContext)
         {
-            _blogRepository = blogRepository;
-            _context = context;
+            _blogDbContext = blogDbContext;
         }
-        public async Task Add(BlogDto blog)
+        public async Task<Blog> AddAsync(Blog blog)
         {
-            var newBlog = new Blog
-            {
-                Name = blog.Name,
-                Description = blog.Description,
-                Author = blog.Author,
-            };
-            await _blogRepository.AddAsync(newBlog);
+            await _blogDbContext.Blogs.AddAsync(blog);
+            await _blogDbContext.SaveChangesAsync();
+            return blog;
         }
 
-        public async Task Delete(int id)
+        public async Task<int> DeleteAsync(int id)
         {
-            await _blogRepository.DeleteAsync(id);
+            return await _blogDbContext.Blogs
+                         .Where(model => model.Id == id)
+                         .ExecuteDeleteAsync();
         }
 
-        public async Task<IList<BlogDto>> GetAll()
+        public async Task<IList<Blog>> GetAllAsync()
         {
-            var listOfBlogs = await _blogRepository.GetAllAsync();
-            var blogDtos = new List<BlogDto>();
-            foreach (var item in blogDtos)
-            {
-                var blogDto = new BlogDto
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Description = item.Description,
-                    Author = item.Author,
-                };
-                blogDtos.Add(blogDto);
-            }
-            return blogDtos;
+            return await _blogDbContext.Blogs .ToListAsync();
         }
 
-        public async Task<BlogDto?> GetById(int id)
+        public async Task<Blog?> GetByIdAsync(int id)
         {
-            var blog = await _blogRepository.GetByIdAsync(id);
-
-            var blogDto = new BlogDto
-            {
-                Id = blog!.Id,
-                Author = blog.Author,
-                Description = blog.Description,
-                Name = blog.Name
-            };
-
-            return blogDto;
+            return await _blogDbContext.Blogs.AsNoTracking()
+                        .FirstOrDefaultAsync(b=>b.Id==id);
         }
 
-        public async Task Update(int id, BlogDto blog)
+        public async Task<int> UpdateAsync(int id, Blog blog)
         {
-            var blogList = await _blogRepository.GetByIdAsync(id);
-            if (blogList is null)
-            {
-                return;
-            }
-            blogList.Name = blog.Name;
-            blogList.Description = blog.Description;
-            blogList.Author = blog.Author;
-
-            await _blogRepository.UpdateAsync(id, blogList);
+            return await _blogDbContext.Blogs
+                  .Where(model => model.Id == id)
+                  .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(m => m.Id, blog.Id)
+                    .SetProperty(m => m.Name, blog.Name)
+                    .SetProperty(m => m.Description, blog.Description)
+                    .SetProperty(m => m.Author, blog.Author)
+                  );
         }
     }
 }

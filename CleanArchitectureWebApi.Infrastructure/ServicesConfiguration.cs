@@ -1,4 +1,6 @@
-﻿using CleanArchitectureWebApi.Infrastructure.Data.DbContexts;
+﻿using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
+using CleanArchitectureWebApi.Infrastructure.Data.DbContexts;
+using CleanArchitectureWebApi.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ namespace CleanArchitectureWebApi.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("BlogDbContext"),
                     b => b.MigrationsAssembly("CleanArchitectureWebApi.Api"));
             });
+            services.AddScoped<IBlogService, BlogService>();
             return services;
         }
     }

@@ -17,8 +17,8 @@ namespace CleanArchitectureWebApi.Api
             builder.Services.AddApplicationServices();
             builder.Services.AddInfrastructureService(builder.Configuration);
 
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped(typeof(IBlogService), typeof(BlogService));
+            //builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            //builder.Services.AddScoped(typeof(IBlogService), typeof(BlogService));
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
