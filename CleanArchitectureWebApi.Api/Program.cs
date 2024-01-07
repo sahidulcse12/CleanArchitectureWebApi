@@ -1,9 +1,8 @@
-
-using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
-using CleanArchitectureWebApi.Infrastructure.Data.DbContexts;
-using CleanArchitectureWebApi.Infrastructure.Data.Repositories;
+using CleanArchitectureWebApi.Application;
+using CleanArchitectureWebApi.Infrastructure;
 using CleanArchitectureWebApi.Infrastructure.Services;
-using Microsoft.EntityFrameworkCore;
+using CleanArchitectureWebApi.Infrastructure.Data.Repositories;
+using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
 
 namespace CleanArchitectureWebApi.Api
 {
@@ -12,12 +11,11 @@ namespace CleanArchitectureWebApi.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            
+            //add layer dependency
 
-            builder.Services.AddDbContext<BlogDbContext>(options =>
-            {
-                options.UseNpgsql(builder.Configuration.GetConnectionString("BlogDbContext"),
-                    b => b.MigrationsAssembly("CleanArchitectureWebApi.Api"));
-            });
+            builder.Services.AddApplicationServices();
+            builder.Services.AddInfrastructureService(builder.Configuration);
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped(typeof(IBlogService), typeof(BlogService));
