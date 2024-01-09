@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs;
+using CleanArchitectureWebApi.Domain.Entities.Blog;
 
 namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetById
 {
-    public class GetBlogByIdQuery : IRequest<BlogVm>
+    public class GetBlogByIdQuery : IRequest<Blog>
     {
         public int BlogId { get; set; }
     }

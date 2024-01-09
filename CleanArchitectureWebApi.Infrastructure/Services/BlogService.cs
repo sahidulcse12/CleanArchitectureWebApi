@@ -27,7 +27,7 @@ namespace CleanArchitectureWebApi.Infrastructure.Services
                          .ExecuteDeleteAsync();
         }
 
-        public async Task<IList<Blog>> GetAllAsync()
+        public async Task<List<Blog>> GetAllAsync()
         {
             return await _blogDbContext.Blogs .ToListAsync();
         }

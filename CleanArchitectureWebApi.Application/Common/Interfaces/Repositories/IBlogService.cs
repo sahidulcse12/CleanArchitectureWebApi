@@ -4,7 +4,7 @@ namespace CleanArchitectureWebApi.Application.Common.Interfaces.Repositories
 {
     public interface IBlogService
     {
-        Task<IList<Blog>> GetAllAsync();
+        Task<List<Blog>> GetAllAsync();
         Task<Blog?> GetByIdAsync(int id);
         Task<Blog> AddAsync(Blog blog);
         Task<int> DeleteAsync(int id);

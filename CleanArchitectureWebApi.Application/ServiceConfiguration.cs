@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using MediatR;
 using FluentValidation;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using CleanArchitectureWebApi.Application.Common.Behaviors;
 
 
 namespace CleanArchitectureWebApi.Application
@@ -14,8 +16,8 @@ namespace CleanArchitectureWebApi.Application
             services.AddMediatR(ctg =>
             {
                 ctg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                //validation
-                //ctg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+                // for validation
+                ctg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             });
 
             return services;

@@ -5,7 +5,7 @@ namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs
 {
     //old approach
 
-    public class GetBlogQuery : IRequest<IList<BlogVm>>
+    public class GetBlogQuery : IRequest<List<Blog>>
     {
     }
 

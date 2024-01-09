@@ -1,16 +1,12 @@
-﻿using AutoMapper;
-using CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs;
+﻿using MediatR;
+using AutoMapper;
+using CleanArchitectureWebApi.Domain.Entities.Blog;
 using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
-using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetById
 {
-    public class GetBlogByIdQueryHandler : IRequestHandler<GetBlogByIdQuery, BlogVm>
+    public class GetBlogByIdQueryHandler : IRequestHandler<GetBlogByIdQuery, Blog>
     {
         private readonly IBlogService _blogService;
         private readonly IMapper _mapper;
@@ -20,10 +16,10 @@ namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetById
             _blogService = blogService;
             _mapper = mapper;
         }
-        public async Task<BlogVm> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Blog> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
         {
             var blog = await _blogService.GetByIdAsync(request.BlogId);
-            return _mapper.Map<BlogVm>(blog);
+            return _mapper.Map<Blog>(blog);
         }
     }
 }

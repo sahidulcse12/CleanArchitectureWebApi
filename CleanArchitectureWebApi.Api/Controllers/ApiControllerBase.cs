@@ -8,7 +8,8 @@ namespace CleanArchitectureWebApi.Api.Controllers
     [ApiController]
     public class ApiControllerBase : ControllerBase
     {
-        private ISender _mediatr;
+        private ISender? _mediatr;
         protected ISender Mediatr => _mediatr ??= HttpContext.RequestServices.GetRequiredService<ISender>();
     }
 }
+ 

@@ -14,7 +14,7 @@ namespace CleanArchitectureWebApi.Infrastructure
             services.AddDbContext<BlogDbContext>(options =>
             {
                 options.UseNpgsql(configuration.GetConnectionString("BlogDbContext"),
-                    b => b.MigrationsAssembly("CleanArchitectureWebApi.Api"));
+                    b => b.MigrationsAssembly("CleanArchitectureWebApi.Infrastructure"));
             });
             services.AddScoped<IBlogService, BlogService>();
             return services;

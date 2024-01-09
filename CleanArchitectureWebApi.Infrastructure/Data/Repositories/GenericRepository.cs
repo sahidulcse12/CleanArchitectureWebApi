@@ -29,7 +29,7 @@ namespace CleanArchitectureWebApi.Infrastructure.Data.Repositories
             await _blogDbContext.SaveChangesAsync();
         }
 
-        public async Task<IList<TEntity>> GetAllAsync()
+        public async Task<List<TEntity>> GetAllAsync()
         {
             return await _blogDbContext.Set<TEntity>().ToListAsync();
         }
