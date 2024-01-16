@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using CleanArchitectureWebApi.Domain.Entities.Blog;
+using CleanArchitectureWebApi.Application.DTOs;
 
 namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs
 {
     //old approach
 
-    public class GetBlogQuery : IRequest<List<Blog>>
+    public class GetBlogQuery : IRequest<List<BlogDto>>
     {
     }
 

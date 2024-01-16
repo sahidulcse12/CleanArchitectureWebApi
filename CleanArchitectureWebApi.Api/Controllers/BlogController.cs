@@ -32,8 +32,9 @@ namespace CleanArchitectureWebApi.Api.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> AddBlog(CreateCommand command)
         {
-            var createdBlog = await Mediatr.Send(command);
-            return CreatedAtAction(nameof(GetById), new { id = createdBlog.Id }, createdBlog);
+            await Mediatr.Send(command);
+            return Ok("Blog is created successfully");
+            
         }
 
         [HttpPut("{id}")]
@@ -51,11 +52,7 @@ namespace CleanArchitectureWebApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await Mediatr.Send(new DeleteCommand { Id = id });
-            if (result == 0)
-            {
-                return BadRequest();
-            }
-            return NoContent();
+            return Ok(result);
         }
     }
 }

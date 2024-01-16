@@ -1,33 +1,36 @@
 ﻿using MediatR;
 using AutoMapper;
+using CleanArchitectureWebApi.Application.DTOs;
 using CleanArchitectureWebApi.Domain.Entities.Blog;
-using CleanArchitectureWebApi.Application.Blogs.Queries.GetBlogs;
 using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
 
 
 namespace CleanArchitectureWebApi.Application.Blogs.Commands.Create
 {
-    public class CreateCommandHandler : IRequestHandler<CreateCommand, Blog>
+    public class CreateCommandHandler : IRequestHandler<CreateCommand, string>
     {
-        private readonly IBlogService _blogService;
+        private IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CreateCommandHandler(IBlogService blogService, IMapper mapper)
+        public CreateCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _blogService = blogService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<Blog> Handle(CreateCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateCommand request, CancellationToken cancellationToken)
         {
-            Blog blogEntity = new Blog()
+            var blogEntity = new Blog()
             {
                 Name = request.Name,
                 Description = request.Description,
                 Author = request.Author,
             };
 
-            var result = await _blogService.AddAsync(blogEntity);
-            return _mapper.Map<Blog>(result);
+            // Perform data operations within the unit of work
+            await _unitOfWork.Blogs.AddAsync(blogEntity);
+            _mapper.Map<BlogDto>(blogEntity);
+
+            return "Blog is created successfully";
         }
     }
 }

@@ -8,17 +8,23 @@ using System.Threading.Tasks;
 
 namespace CleanArchitectureWebApi.Application.Blogs.Commands.Delete
 {
-    public class DeleteCommandHandler : IRequestHandler<DeleteCommand, int>
+    public class DeleteCommandHandler : IRequestHandler<DeleteCommand, string>
     {
-        private readonly IBlogService _blogService;
+        private readonly IBlogRepository _blogRepository;
 
-        public DeleteCommandHandler(IBlogService blogService)
+        public DeleteCommandHandler(IBlogRepository blogService)
         {
-            _blogService = blogService;
+            _blogRepository = blogService;
         }
-        public async Task<int> Handle(DeleteCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(DeleteCommand request, CancellationToken cancellationToken)
         {
-            return await _blogService.DeleteAsync(request.Id);
+            var result = await _blogRepository.GetByIdAsync(request.Id);
+            if(result == null)
+            {
+                throw new Exception("Blog is not found");
+            }
+            await _blogRepository.DeleteAsync(request.Id);
+            return "Blog is successfully deleted";
         }
     }
 }

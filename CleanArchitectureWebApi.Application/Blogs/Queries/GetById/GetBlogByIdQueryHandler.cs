@@ -1,25 +1,25 @@
 ﻿using MediatR;
 using AutoMapper;
-using CleanArchitectureWebApi.Domain.Entities.Blog;
+using CleanArchitectureWebApi.Application.DTOs;
 using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
 
 
 namespace CleanArchitectureWebApi.Application.Blogs.Queries.GetById
 {
-    public class GetBlogByIdQueryHandler : IRequestHandler<GetBlogByIdQuery, Blog>
+    public class GetBlogByIdQueryHandler : IRequestHandler<GetBlogByIdQuery, BlogDto>
     {
-        private readonly IBlogService _blogService;
+        private readonly IBlogRepository _blogRepository;
         private readonly IMapper _mapper;
 
-        public GetBlogByIdQueryHandler(IBlogService blogService, IMapper mapper)
+        public GetBlogByIdQueryHandler(IBlogRepository blogService, IMapper mapper)
         {
-            _blogService = blogService;
+            _blogRepository = blogService;
             _mapper = mapper;
         }
-        public async Task<Blog> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
+        public async Task<BlogDto> Handle(GetBlogByIdQuery request, CancellationToken cancellationToken)
         {
-            var blog = await _blogService.GetByIdAsync(request.BlogId);
-            return _mapper.Map<Blog>(blog);
+            var blog = await _blogRepository.GetByIdAsync(request.BlogId);
+            return _mapper.Map<BlogDto>(blog);
         }
     }
 }

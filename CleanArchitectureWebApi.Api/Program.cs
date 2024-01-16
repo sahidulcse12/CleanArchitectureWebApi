@@ -1,8 +1,5 @@
 using CleanArchitectureWebApi.Application;
 using CleanArchitectureWebApi.Infrastructure;
-using CleanArchitectureWebApi.Infrastructure.Services;
-using CleanArchitectureWebApi.Infrastructure.Data.Repositories;
-using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
 
 namespace CleanArchitectureWebApi.Api
 {
@@ -17,8 +14,8 @@ namespace CleanArchitectureWebApi.Api
             builder.Services.AddApplicationServices();
             builder.Services.AddInfrastructureService(builder.Configuration);
 
-            //builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-            //builder.Services.AddScoped(typeof(IBlogService), typeof(BlogService));
+            //builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            //builder.Services.AddScoped(typeof(IBlogRepository), typeof(BlogRepository));
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

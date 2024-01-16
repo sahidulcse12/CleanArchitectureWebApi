@@ -4,15 +4,15 @@ using CleanArchitectureWebApi.Application.Common.Interfaces.Repositories;
 
 namespace CleanArchitectureWebApi.Application.Blogs.Commands.Update
 {
-    public class UpdateCommandHandler : IRequestHandler<UpdateCommand, int>
+    public class UpdateCommandHandler : IRequestHandler<UpdateCommand, string>
     {
-        private readonly IBlogService _blogService;
+        private readonly IBlogRepository _blogRepository;
 
-        public UpdateCommandHandler(IBlogService blogService)
+        public UpdateCommandHandler(IBlogRepository blogService)
         {
-            _blogService = blogService;
+            _blogRepository = blogService;
         }
-        public async Task<int> Handle(UpdateCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(UpdateCommand request, CancellationToken cancellationToken)
         {
             var UdateblogEntity = new Blog()
             {
@@ -22,7 +22,8 @@ namespace CleanArchitectureWebApi.Application.Blogs.Commands.Update
                 Name = request.Name,
             };
 
-            return await _blogService.UpdateAsync(request.Id, UdateblogEntity);
+            await _blogRepository.UpdateAsync(request.Id, UdateblogEntity);
+            return "Blog is updated successfully";
         }
     }
 }

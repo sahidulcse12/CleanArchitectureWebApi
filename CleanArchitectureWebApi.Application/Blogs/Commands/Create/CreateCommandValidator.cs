@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+using CleanArchitectureWebApi.Application.Common;
 
 
 namespace CleanArchitectureWebApi.Application.Blogs.Commands.Create
 {
-    public class CreateCommandValidator : AbstractValidator<CreateCommand>
+    public class CreateCommandValidator : ApplicationValidator<CreateCommand>
     {
         public CreateCommandValidator()
         {
